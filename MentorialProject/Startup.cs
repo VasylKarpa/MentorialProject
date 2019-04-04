@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MentorialProject.DAL.Context;
+using MentorialProject.DAL.Enteties;
+using MentorialProject.DAL.Repositories;
+using MentorialProject.Domain.Interfaces.IRepository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +31,7 @@ namespace MentorialProject {
      // Add DbContext using SQL Server Provider
       services.AddDbContext<SaleDbContext>(options =>
       options.UseSqlServer(Configuration.GetConnectionString("MentorialProjectDB")));
+      services.AddScoped<IRepository<Sale>, SaleRepository>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

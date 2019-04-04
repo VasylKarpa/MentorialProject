@@ -1,5 +1,6 @@
 ﻿namespace MentorialProject.DAL.Enteties {
   public class SaleResult {
+    public int id { get; set; }
     public string at { get; set; }
     public int bi { get; set; }
     public int cat { get; set; }
