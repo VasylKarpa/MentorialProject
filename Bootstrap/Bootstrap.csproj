@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MentorialProject.DAL\MentorialProject.DAL.csproj" />
+    <ProjectReference Include="..\MentorialProject.Domain\MentorialProject.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

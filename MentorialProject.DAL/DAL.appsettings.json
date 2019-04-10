@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "MentorialProjectDB": "Server=(localdb)\\mssqllocaldb;Database=MentorialProjectDB;Trusted_Connection=True;"
+  }
+}

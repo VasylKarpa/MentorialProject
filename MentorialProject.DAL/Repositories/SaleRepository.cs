@@ -5,6 +5,7 @@ using System.Reflection;
 using MentorialProject.DAL.Context;
 using MentorialProject.DAL.Enteties;
 using MentorialProject.Domain.Interfaces.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace MentorialProject.DAL.Repositories {
   public class SaleRepository : IRepository<Sale>{
@@ -24,20 +25,25 @@ namespace MentorialProject.DAL.Repositories {
             .FirstOrDefault(e => e.id == id);
     }
 
-    public void Add(Sale entity) {
-      _saleDbContext.Sales.Add(entity);
-      _saleDbContext.SaveChanges();
-    }
+    public void AddOrUpdate(Sale sale) {
+      var entry = this._saleDbContext.Entry(sale);
 
-    public void Update(Sale data, Sale sale) {
-
-      //var saleResult = data.results;
-      //var properties = saleResult.GetType().GetGenericArguments(BindingFlags.Public | BindingFlags.Instance);
-      //foreach (var propertie in properties) {
-      //  var propertyValue = propertie.GetValue(data);
-      //  propertie.SetValue(sale, propertyValue);
-      //}
-
+      switch (entry.State) {
+        case EntityState.Detached:
+          this._saleDbContext.Set<Sale>().Add(sale);
+          break;
+        case EntityState.Modified:
+          this._saleDbContext.Set<Sale>().Update(sale);
+          break;
+        case EntityState.Added:
+          this._saleDbContext.Set<Sale>().Add(sale);
+          break;
+        case EntityState.Unchanged:
+          //item already in db no need to do anything  
+          break;
+        default:
+          throw new ArgumentOutOfRangeException();
+      }
       _saleDbContext.SaveChanges();
     }
 

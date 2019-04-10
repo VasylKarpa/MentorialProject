@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bootstrap\Bootstrap.csproj" />
     <ProjectReference Include="..\MentorialProject.DAL\MentorialProject.DAL.csproj" />
     <ProjectReference Include="..\MentorialProject.Domain\MentorialProject.Domain.csproj" />
   </ItemGroup>

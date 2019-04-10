@@ -39,29 +39,27 @@ namespace MentorialProject.Controllers {
     // POST: api/Sale
     [HttpPost]
     public IActionResult Post([FromBody] Sale sale) {
-      if (sale == null) {
-        return BadRequest("Sale is null.");
-      }
+      try {
+        // using CreateOrUpdate method makes it necessary to check for existance
+        Sale saleCheckForExist = _repository.Get(sale.id);
 
-      _repository.Add(sale);
-      return CreatedAtRoute("Get", new { Id = sale.id }, sale);
+        if (saleCheckForExist != null) {
+          // Do some stuff with object
+          // ...
+          _repository.AddOrUpdate(saleCheckForExist);
+        }
+        else {
+          saleCheckForExist = new Sale();
+          // Do some stuff
+          _repository.AddOrUpdate(saleCheckForExist);
+        }
+        return Ok(sale);
+      }
+      catch (Exception ex) {
+        return StatusCode(500, "Internal Server Error");
+      }
     }
 
-    //Put: api/Sale/5
-    [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] Sale sale) {
-      if (sale == null) {
-        return BadRequest("Sale is null.");
-      }
-
-      Sale saleToUpdate = _repository.Get(id);
-      if (saleToUpdate == null) {
-        return NotFound("The Sale record couldn't be found.");
-      }
-
-      _repository.Update(saleToUpdate, sale);
-      return NoContent();
-    }
 
     // DELETE: api/Sale/5
     [HttpDelete("{id}")]
@@ -70,7 +68,6 @@ namespace MentorialProject.Controllers {
       if (sale == null) {
         return NotFound("The sale record couldn't be found.");
       }
-
       _repository.Delete(sale);
       return NoContent();
     }
