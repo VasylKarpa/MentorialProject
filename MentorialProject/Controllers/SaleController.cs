@@ -13,21 +13,21 @@ namespace MentorialProject.Controllers {
   public class SaleController : ControllerBase {
     private readonly IRepository<Sale> _repository;
 
-    public SaleController(IRepository<Sale> _repository) {
-      _repository = _repository;
+    public SaleController(IRepository<Sale> repository) {
+      _repository = repository;
     }
 
     // GET: api/Sale
     [HttpGet]
-    public IActionResult Get() {
-      IEnumerable<Sale> sales = _repository.GetAll();
+    public async Task<IActionResult> Get() {
+      IEnumerable<Sale> sales = await _repository.GetAll();
       return Ok(sales);
     }
 
     // GET: api/Sale/5
     [HttpGet("{id}", Name = "Get")]
-    public IActionResult Get(int id) {
-      Sale sale = _repository.Get(id);
+    public async Task<IActionResult> Get(int id) {
+      Sale sale = await _repository.Get(id);
 
       if (sale == null) {
         return NotFound("The sale record couldn't be found.");
@@ -38,37 +38,30 @@ namespace MentorialProject.Controllers {
 
     // POST: api/Sale
     [HttpPost]
-    public IActionResult Post([FromBody] Sale sale) {
-      try {
+    public async Task<IActionResult> Post([FromBody] Sale sale) {
+     
         // using CreateOrUpdate method makes it necessary to check for existance
-        Sale saleCheckForExist = _repository.Get(sale.id);
+        Sale saleCheckForExist = await _repository.Get(sale.id);
 
         if (saleCheckForExist != null) {
           // Do some stuff with object
           // ...
-          _repository.AddOrUpdate(saleCheckForExist);
+          await _repository.AddOrUpdate(saleCheckForExist);
         }
         else {
           saleCheckForExist = new Sale();
           // Do some stuff
-          _repository.AddOrUpdate(saleCheckForExist);
+          await _repository.AddOrUpdate(saleCheckForExist);
         }
         return Ok(sale);
-      }
-      catch (Exception ex) {
-        return StatusCode(500, "Internal Server Error");
-      }
     }
 
 
     // DELETE: api/Sale/5
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id) {
-      Sale sale = _repository.Get(id);
-      if (sale == null) {
-        return NotFound("The sale record couldn't be found.");
-      }
-      _repository.Delete(sale);
+    public async Task<IActionResult> Delete(Sale sale) {
+
+      await _repository.Delete(sale);
       return NoContent();
     }
   }

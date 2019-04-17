@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using MentorialProject.DAL.Context;
 using MentorialProject.DAL.Enteties;
 using MentorialProject.Domain.Interfaces.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace MentorialProject.DAL.Repositories {
-  public class SaleRepository : IRepository<Sale>{
+  public class SaleRepository : IRepository<Sale> {
 
     readonly SaleDbContext _saleDbContext;
 
@@ -16,40 +17,39 @@ namespace MentorialProject.DAL.Repositories {
       _saleDbContext = context;
     }
 
-    public IEnumerable<Sale> GetAll() {
-      return _saleDbContext.Sales.ToList();
+    public async Task<IEnumerable<Sale>> GetAll() {
+      return await _saleDbContext.Sales.ToListAsync();
     }
 
-    public Sale Get(int id) {
-      return _saleDbContext.Sales
-            .FirstOrDefault(e => e.id == id);
+    public async Task<Sale> Get(int id) {
+      return await _saleDbContext.Sales.FirstOrDefaultAsync(e => e.id == id);
     }
 
-    public void AddOrUpdate(Sale sale) {
-      var entry = this._saleDbContext.Entry(sale);
+    public async Task AddOrUpdate(Sale sale) {
+      var entry = _saleDbContext.Entry(sale);
 
       switch (entry.State) {
         case EntityState.Detached:
-          this._saleDbContext.Set<Sale>().Add(sale);
+          _saleDbContext.Set<Sale>().Add(sale);
           break;
         case EntityState.Modified:
-          this._saleDbContext.Set<Sale>().Update(sale);
+          _saleDbContext.Set<Sale>().Update(sale);
           break;
         case EntityState.Added:
-          this._saleDbContext.Set<Sale>().Add(sale);
+          await _saleDbContext.Set<Sale>().AddAsync(sale);
           break;
         case EntityState.Unchanged:
           //item already in db no need to do anything  
           break;
         default:
-          throw new ArgumentOutOfRangeException();
+          throw new ArgumentException();
       }
-      _saleDbContext.SaveChanges();
+     await _saleDbContext.SaveChangesAsync();
     }
 
-    public void Delete(Sale sale) {
+    public async Task Delete(Sale sale) {
       _saleDbContext.Sales.Remove(sale);
-      _saleDbContext.SaveChanges();
+     await _saleDbContext.SaveChangesAsync();
     }
   }
 }

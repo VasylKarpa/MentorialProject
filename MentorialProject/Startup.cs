@@ -28,11 +28,11 @@ namespace MentorialProject {
     public IHostingEnvironment Environment { get; }
 
     // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services) {
+    public void ConfigureServices(IServiceCollection services, IHostingEnvironment environment) {
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
       // Add DbContext using SQL Server Provider
-      services.RegisterAppServices(Configuration);
+      services.RegisterAppServices(Configuration, environment);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
