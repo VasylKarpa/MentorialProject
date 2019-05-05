@@ -11,7 +11,8 @@ using Microsoft.Extensions.Logging;
 namespace MentorialProject {
   public class Program {
     public static void Main(string[] args) {
-      CreateWebHostBuilder(args).Build().Run();
+            AppContext.SetSwitch("System.Net.Http.UseSocketsHttpHandler", false);
+            CreateWebHostBuilder(args).Build().Run();
     }
 
     public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
